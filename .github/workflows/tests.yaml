@@ -1,0 +1,16 @@
+on: push
+jobs:
+  build:
+    strategy:
+      matrix:
+        cmake: [3.13.4, 3.27.4]
+    runs-on: ["ubuntu-22.04"]
+    steps:
+      - name: Setup cmake
+        uses: jwlawson/actions-setup-cmake@v1
+        with:
+          cmake-version: ${{ matrix.cmake }}
+      - name: Checkout source
+        uses: actions/checkout@v4
+      - name: Run tests
+        run: mkdir build && cd build && cmake -Wdev -Werror=dev .. && make all && ctest --output-on-failure
